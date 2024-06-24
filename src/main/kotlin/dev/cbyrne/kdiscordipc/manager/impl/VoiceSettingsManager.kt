@@ -29,5 +29,5 @@ class VoiceSettingsManager(override val ipc: KDiscordIPC) : Manager() {
         ipc.sendPacket<InboundSetVoiceSettingsPacket>(SetVoiceSettingsPacket(args = settings))
     }
 
-    suspend fun subscribeToVoiceSettingsUpdate() = ipc.subscribe(DiscordEvent.VoiceSettingsUpdate)
+    suspend fun subscribeToVoiceSettingsUpdate() = ipc.subscribe(DiscordEvent.VoiceStateUpdate)
 }

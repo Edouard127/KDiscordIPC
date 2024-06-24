@@ -25,24 +25,15 @@ suspend fun main() {
 
             party(UUID.randomUUID().toString(), 1, 2)
             secrets(UUID.randomUUID().toString())
-//            button("Click me", "https://google.com")
+            //button("Click me", "https://google.com") // Buttons cannot be used with secrets (parties)
             timestamps(System.currentTimeMillis(), System.currentTimeMillis() + 50000)
         }
 
+        ipc.applicationManager.authenticate() // Required to listen for party updates
+
         // Subscribe to some events
         ipc.subscribe(DiscordEvent.CurrentUserUpdate)
-        ipc.subscribe(DiscordEvent.ActivityJoinRequest)
-        ipc.subscribe(DiscordEvent.ActivityJoin)
-        ipc.subscribe(DiscordEvent.ActivityInvite)
-        ipc.subscribe(DiscordEvent.ActivitySpectate)
-
-        // Get a specific user by ID
-        val user = ipc.userManager.getUser("843135686173392946")
-        logger.info("User by ID: $user")
-
-        // Get the user's friend list
-        val relationships = ipc.relationshipManager.getRelationships()
-        logger.info("Relationships: ${relationships.size}")
+        ipc.subscribe(DiscordEvent.ActivityInstanceParticipantsUpdate)
     }
 
     ipc.on<DisconnectedEvent> {
