@@ -47,7 +47,7 @@ class KDiscordIPC(
     val scope: CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
 ) {
     companion object {
-        internal val logger = LoggerFactory.getLogger(KDiscordIPC::class.java)
+        internal val logger = LoggerFactory.getLogger("KDiscordIPC")
     }
 
     private val socketHandler = SocketHandler(scope, socketSupplier) {
@@ -88,6 +88,7 @@ class KDiscordIPC(
         writePacket(HandshakePacket(1, clientID))
 
         socketHandler.events.collect {
+            logger.info("Received packet: $it")
             when (it) {
                 is DispatchEventPacket.Ready -> _events.emit(ReadyEvent(it.data))
                 is DispatchEventPacket.UserUpdate -> _events.emit(CurrentUserUpdateEvent(it.data))

@@ -5,6 +5,8 @@ import dev.cbyrne.kdiscordipc.core.event.DiscordEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.*
 import dev.cbyrne.kdiscordipc.core.event.impl.DisconnectedEvent
 import dev.cbyrne.kdiscordipc.data.activity.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.util.*
@@ -18,15 +20,21 @@ suspend fun main() {
     ipc.on<ReadyEvent> {
         logger.info("Ready! (${data.user.username}#${data.user.discriminator})")
 
-        // Set the user's activity (a.k.a. rich presence)
-        ipc.activityManager.setActivity("Hello") {
-            largeImage("https://avatars.githubusercontent.com/u/71222289?v=4", "KDiscordIPC")
-            smallImage("https://avatars.githubusercontent.com/u/71222289?v=4", "Testing")
+        // Spawn new coroutine
+        ipc.scope.launch {
+            while(true) {
+                // Set the user's activity (a.k.a. rich presence)
+                ipc.activityManager.setActivity("Hello") {
+                    largeImage("https://avatars.githubusercontent.com/u/71222289?v=4", "KDiscordIPC")
+                    smallImage("https://avatars.githubusercontent.com/u/71222289?v=4", "Testing")
 
-            party(UUID.randomUUID().toString(), 1, 2)
-            secrets(UUID.randomUUID().toString())
-            //button("Click me", "https://google.com") // Buttons cannot be used with secrets (parties)
-            timestamps(System.currentTimeMillis())
+                    party(UUID.randomUUID().toString(), 1, 2)
+                    secrets(UUID.randomUUID().toString())
+                    //button("Click me", "https://google.com") // Buttons cannot be used with secrets (parties)
+                }
+
+                delay(5000)
+            }
         }
 
         ipc.applicationManager.authenticate() // Required to listen for party updates
