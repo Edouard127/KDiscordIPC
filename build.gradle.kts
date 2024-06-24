@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.6.20"
-    kotlin("plugin.serialization") version "1.6.20"
+    kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "2.0.0"
 
     `maven-publish`
 }
@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
 
     implementation(libs.slf4j.api)
+    implementation(libs.slf4j.simple)
     implementation(libs.junixsocket.core)
 
     exampleImplementation(sourceSets.main.get().output)

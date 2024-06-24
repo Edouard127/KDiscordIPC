@@ -47,7 +47,7 @@ class KDiscordIPC(
     val scope: CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
 ) {
     companion object {
-        internal val logger = LoggerFactory.getLogger("KDiscordIPC")
+        internal val logger = LoggerFactory.getLogger(KDiscordIPC::class.java)
     }
 
     private val socketHandler = SocketHandler(scope, socketSupplier) {
@@ -101,15 +101,8 @@ class KDiscordIPC(
         }
     }
 
-    @JvmName("onEvent")
-    suspend inline fun <reified T : Event> on(noinline consumer: suspend T.() -> Unit) =
+    suspend inline fun <reified T : Any> on(noinline consumer: suspend T.() -> Unit) =
         events.filterIsInstance<T>().onEach { event ->
-            scope.launch { consumer(event) }
-        }.launchIn(scope)
-
-    @JvmName("onPacket")
-    suspend inline fun <reified T : InboundPacket> on(noinline consumer: suspend T.() -> Unit) =
-        packets.filterIsInstance<T>().onEach { event ->
             scope.launch { consumer(event) }
         }.launchIn(scope)
 

@@ -8,84 +8,96 @@ import kotlinx.serialization.Serializable
  * Represents a Discord event.
  * @param eventName The name of the event.
  *
- * @see <a href="https://discord.com/developers/docs/developer-tools/embedded-app-sdk#sdk-events">Discord SDK Events</a>
+ * @see <a href="https://discord.com/developers/docs/topics/rpc#commands-and-events>Discord RPC Documentation</a>
  */
 enum class DiscordEvent(val eventName: String) {
     /**
-     * Received when a user's voice state changes in a subscribed voice channel (mute, volume, etc).
-     *
-     * Required Scopes:
-     * - `rpc.voice.read`
-     *
-     * Take note that the rpc.* scopes are only available to approved applications.
+     * Sent when a subscribed server's state changes
+     */
+    GuildStatus("GUILD_STATUS"),
+
+    /**
+     * 	Sent when a guild is created/joined on the client
+     */
+    GuildCreate("GUILD_CREATE"),
+
+    /**
+     * Sent when a channel is created/joined on the client
+     */
+    ChannelCreate("CHANNEL_CREATE"),
+
+    /**
+     * Sent when the client joins a voice channel
+     */
+    VoiceChannelSelect("VOICE_CHANNEL_SELECT"),
+
+    /**
+     * Sent when a user joins a subscribed voice channel
+     */
+    VoiceStateCreate("VOICE_STATE_CREATE"),
+
+    /**
+     * Sent when a user's voice state changes in a subscribed voice channel (mute, volume, etc.)
      */
     VoiceStateUpdate("VOICE_STATE_UPDATE"),
 
     /**
-     * Received when a user in a subscribed voice channel speaks.
-     *
-     * Required Scopes:
-     * - `rpc.voice.read`
-     *
-     * Take note that the rpc.* scopes are only available to approved applications.
+     * Sent when a user parts a subscribed voice channel
+     */
+    VoiceStateDelete("VOICE_STATE_DELETE"),
+
+    /**
+     * Sent when the client's voice settings update
+     */
+    VoiceSettingsUpdate("VOICE_SETTINGS_UPDATE"),
+
+    /**
+     * Sent when the client's voice connection status changes
+     */
+    VoiceConnectionStatus("VOICE_CONNECTION_STATUS"),
+
+    /**
+     * Sent when a user in a subscribed voice channel speaks
      */
     SpeakingStart("SPEAKING_START"),
 
     /**
-     * Received when a user in a subscribed voice channel stops speaking.
-     *
-     * Required Scopes:
-     * - `rpc.voice.read`
-     *
-     * Take note that the rpc.* scopes are only available to approved applications.
+     * Sent when a user in a subscribed voice channel stops speaking
      */
     SpeakingStop("SPEAKING_STOP"),
 
     /**
-     * Received when a user changes the layout mode in the Discord client.
-     *
-     * Required Scopes:
-     * - None
-     *
-     * Only available on the mobile Discord Client.
+     * Sent when a message is created in a subscribed text channel
      */
-    ActivityLayoutModeUpdate("ACTIVITY_LAYOUT_MODE_UPDATE"),
+    MessageCreate("MESSAGE_CREATE"),
 
     /**
-     * Received when screen orientation changes.
-     *
-     * Required Scopes:
-     * - None
-     *
-     * Only available on the mobile Discord Client.
+     * Sent when a message is updated in a subscribed text channel
      */
-    OrientationUpdate("ORIENTATION_UPDATE"),
+    MessageUpdate("MESSAGE_UPDATE"),
 
     /**
-     * Received when the current user object changes.
-     *
-     * Required Scopes:
-     * - `identify`
+     * Sent when a message is deleted in a subscribed text channel
      */
-    CurrentUserUpdate("CURRENT_USER_UPDATE"),
+    MessageDelete("MESSAGE_DELETE"),
 
     /**
-     * Received when Android or iOS thermal states are surfaced to the Discord mobile app.
-     *
-     * Required Scopes:
-     * - None
-     *
-     * Only available on the mobile Discord Client.
+     * Sent when the client receives a notification (mention or new message in eligible channels)
      */
-    ThermalStateUpdate("THERMAL_STATE_UPDATE"),
+    NotificationCreate("NOTIFICATION_CREATE"),
 
     /**
-     * Received when the number of instance participants changes.
-     *
-     * Required Scopes:
-     * - None
-     *
-     * Requires to be authenticated
+     * Sent when the user clicks a Rich Presence join invite in chat to join a game
      */
-    ActivityInstanceParticipantsUpdate("ACTIVITY_INSTANCE_PARTICIPANTS_UPDATE"),
+    ActivityJoin("ACTIVITY_JOIN"),
+
+    /**
+     * Sent when the user clicks a Rich Presence spectate invite in chat to spectate a game
+     */
+    ActivitySpectate("ACTIVITY_SPECTATE"),
+
+    /**
+     * Sent when the user receives a Rich Presence Ask to Join request
+     */
+    ActivityJoinRequest("ACTIVITY_JOIN_REQUEST"),
 }

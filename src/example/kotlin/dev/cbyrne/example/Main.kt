@@ -26,14 +26,18 @@ suspend fun main() {
             party(UUID.randomUUID().toString(), 1, 2)
             secrets(UUID.randomUUID().toString())
             //button("Click me", "https://google.com") // Buttons cannot be used with secrets (parties)
-            timestamps(System.currentTimeMillis(), System.currentTimeMillis() + 50000)
+            timestamps(System.currentTimeMillis())
         }
 
         ipc.applicationManager.authenticate() // Required to listen for party updates
 
         // Subscribe to some events
-        ipc.subscribe(DiscordEvent.CurrentUserUpdate)
-        ipc.subscribe(DiscordEvent.ActivityInstanceParticipantsUpdate)
+        //ipc.subscribe(DiscordEvent.GuildStatus)
+        //ipc.subscribe(DiscordEvent.VoiceStateUpdate)
+        //ipc.subscribe(DiscordEvent.VoiceSettingsUpdate)
+        ipc.subscribe(DiscordEvent.ActivityJoin)
+        ipc.subscribe(DiscordEvent.ActivityJoinRequest)
+        ipc.subscribe(DiscordEvent.ActivitySpectate)
     }
 
     ipc.on<DisconnectedEvent> {
