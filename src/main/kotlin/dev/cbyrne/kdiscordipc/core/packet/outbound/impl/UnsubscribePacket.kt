@@ -6,13 +6,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 /**
- * A packet to subscribe to an RPC event.
+ * A packet to unsubscribe to an RPC event.
  * @param evt The event to subscribe to.
- * @see <a href="https://discord.com/developers/docs/topics/rpc#subscribe">Discord RPC Documentation</a>
+ * @see <a href="https://discord.com/developers/docs/topics/rpc#unsubscribe">Discord RPC Documentation</a>
  */
-data class SubscribePacket(
+data class UnsubscribePacket(
     override val opcode: Int = 0x01,
-    override val cmd: String = "SUBSCRIBE",
+    override val cmd: String = "UNSUBSCRIBE",
     override val args: Arguments = Arguments(),
     override var nonce: String = "0",
     val evt: String

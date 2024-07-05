@@ -14,20 +14,15 @@ class VoiceSettingsManager(override val ipc: KDiscordIPC) : Manager() {
     var currentVoiceSettings: VoiceSettings? = null
         private set
 
+    suspend fun getVoiceSettings(): VoiceSettings =
+        ipc.sendPacket<InboundGetVoiceSettingsPacket>(GetVoiceSettingsPacket()).data
+
+    suspend fun setVoiceSettings(settings: SetVoiceSettingsPacket.VoiceSettingArguments) =
+        ipc.sendPacket<InboundSetVoiceSettingsPacket>(SetVoiceSettingsPacket(args = settings))
+
     override suspend fun init() {
         ipc.on<VoiceSettingsUpdateEvent> {
             currentVoiceSettings = this.data
         }
     }
-
-    suspend fun getVoiceSettings(): VoiceSettings {
-        val response: InboundGetVoiceSettingsPacket = ipc.sendPacket(GetVoiceSettingsPacket())
-        return response.data
-    }
-
-    suspend fun setVoiceSettings(settings: SetVoiceSettingsPacket.VoiceSettingArguments) {
-        ipc.sendPacket<InboundSetVoiceSettingsPacket>(SetVoiceSettingsPacket(args = settings))
-    }
-
-    suspend fun subscribeToVoiceSettingsUpdate() = ipc.subscribe(DiscordEvent.VoiceStateUpdate)
 }

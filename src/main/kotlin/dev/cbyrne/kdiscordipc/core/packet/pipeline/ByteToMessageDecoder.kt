@@ -17,7 +17,7 @@ object ByteToMessageDecoder {
                 throw DecodeError.InvalidData
             }
 
-            KDiscordIPC.logger.info("Decoding: $data")
+            KDiscordIPC.logger.debug("Decoding: $data")
 
             return json.decodeFromString<InboundPacket>(data)
         } catch (e: SerializationException) {

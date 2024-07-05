@@ -5,16 +5,21 @@ import dev.cbyrne.kdiscordipc.core.event.DiscordEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.*
 import dev.cbyrne.kdiscordipc.core.event.impl.DisconnectedEvent
 import dev.cbyrne.kdiscordipc.data.activity.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import java.util.*
 
-val logger: Logger = LogManager.getLogger("Example")
+val logger: Logger = LogManager.getRootLogger()
+
+@Serializable
+data class TokenAuthorizeResponse(
+    @SerialName("rpc_token") val rpcToken: String,
+)
 
 suspend fun main() {
-    val ipc = KDiscordIPC("1254900803227877427")
+    val ipc = KDiscordIPC("945428344806183003")
     logger.info("Starting example!")
 
     ipc.on<ReadyEvent> {
@@ -30,16 +35,19 @@ suspend fun main() {
             //button("Click me", "https://google.com") // Buttons cannot be used with secrets (parties)
         }
 
+        ipc.applicationManager.authorize(
+            scopes = arrayOf("identify", "rpc.notifications.read"),
+            clientId = "945428344806183003"
+        )
 
-        ipc.applicationManager.authenticate() // Required to listen for party updates
+        ipc.applicationManager.authenticate()
 
         // Subscribe to some events
         //ipc.subscribe(DiscordEvent.GuildStatus)
-        //ipc.subscribe(DiscordEvent.VoiceStateUpdate)
-        //ipc.subscribe(DiscordEvent.VoiceSettingsUpdate)
         ipc.subscribe(DiscordEvent.ActivityJoin)
-        ipc.subscribe(DiscordEvent.ActivityJoinRequest)
         ipc.subscribe(DiscordEvent.ActivitySpectate)
+        ipc.subscribe(DiscordEvent.ActivityJoinRequest)
+        //ipc.subscribe(DiscordEvent.NotificationCreate)
     }
 
     ipc.on<DisconnectedEvent> {
@@ -50,22 +58,30 @@ suspend fun main() {
         logger.error("IPC communication error (${data.code}): ${data.message}")
     }
 
-    ipc.on<CurrentUserUpdateEvent> {
-        logger.info("Current user updated!")
-    }
-
     ipc.on<ActivityJoinEvent> {
         logger.info("The user has joined someone else's party! ${data.secret}")
     }
 
-    ipc.on<ActivityInviteEvent> {
-        logger.info("We have been invited to join ${data.user.username}'s party! (${data.activity.party.id})")
+    ipc.on<ActivityJoinRequestEvent> {
+        logger.info("We have been invited to join ${data.userId}'s party!")
 
-        ipc.activityManager.acceptInvite(data)
+        ipc.activityManager.acceptJoinRequest(data.userId)
     }
 
     ipc.on<VoiceSettingsUpdateEvent> {
         logger.info("Voice settings updated! User is now ${if (this.data.mute) "" else "not "}muted")
+    }
+
+    ipc.on<MessageCreateEvent> {
+        logger.info("Message received: ${data.message}")
+    }
+
+    ipc.on<MessageUpdateEvent> {
+        logger.info("Message updated: ${data.message}")
+    }
+
+    ipc.on<MessageDeleteEvent> {
+        logger.info("Message deleted: ${data.message}")
     }
 
     ipc.connect()

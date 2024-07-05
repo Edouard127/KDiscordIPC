@@ -1,5 +1,7 @@
 package dev.cbyrne.kdiscordipc.core.event.impl
 
 import dev.cbyrne.kdiscordipc.core.event.Event
+import kotlinx.serialization.Serializable
 
-class DisconnectedEvent : Event
+@Serializable
+class NotificationEvent : Event

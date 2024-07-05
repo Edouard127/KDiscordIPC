@@ -11,8 +11,8 @@ import java.io.File
  *   - On macOS and Linux, this will be backed by a Unix Domain Socket
  *   - On Windows, this will be backed by a RandomAccessFile
  *
- * @see dev.cbyrne.kdiscordipc.core.socket.impl.UnixSocket
- * @see dev.cbyrne.kdiscordipc.core.socket.impl.WindowsSocket
+ * @see [UnixSocket]
+ * @see [WindowsSocket]
  */
 interface Socket {
     val connected: Boolean

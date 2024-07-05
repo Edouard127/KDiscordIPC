@@ -12,6 +12,18 @@ import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.AuthorizePacket as Inboun
  */
 class ApplicationManager(override val ipc: KDiscordIPC) : Manager() {
     /**
+     * Authorize the current user for the IPC connection with the specified scopes.
+     * You can then use the token on the `https://discord.com/api/oauth2/token/rpc` endpoint to get a bearer token.
+     *
+     * Note that your application must be in a private beta in order to use this in production.
+     * TODO: Retrieve the token from the `https://discord.com/api/oauth2/token/rpc` endpoint.
+     */
+    suspend fun authorize(scopes: Array<String>? = null, clientId: String? = null, rpcToken: String? = null, username: String? = null): InboundAuthorizePacket.Data {
+        val response: InboundAuthorizePacket = ipc.sendPacket(AuthorizePacket(scopes, clientId, rpcToken, username))
+        return response.data
+    }
+
+    /**
      * **Make sure that you have `http://127.0.0.1` set as a valid redirect URI for your application in the Developer Portal.**
      *
      * Retrieve an oauth2 bearer token for the current user.
@@ -22,11 +34,6 @@ class ApplicationManager(override val ipc: KDiscordIPC) : Manager() {
      */
     suspend fun authenticate(token: String? = null): InboundAuthenticatePacket.Data {
         val response: InboundAuthenticatePacket = ipc.sendPacket(AuthenticatePacket(token))
-        return response.data
-    }
-
-    suspend fun authorize(scopes: Array<String>? = null, clientId: String? = null, rpcToken: String? = null, username: String? = null): InboundAuthorizePacket.Data {
-        val response: InboundAuthorizePacket = ipc.sendPacket(AuthorizePacket(scopes, clientId, rpcToken, username))
         return response.data
     }
 }

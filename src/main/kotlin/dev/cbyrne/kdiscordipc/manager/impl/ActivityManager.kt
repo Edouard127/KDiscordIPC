@@ -1,16 +1,14 @@
-@file:Suppress("unused")
-
 package dev.cbyrne.kdiscordipc.manager.impl
 
 import dev.cbyrne.kdiscordipc.KDiscordIPC
-import dev.cbyrne.kdiscordipc.core.event.data.ActivityInviteEventData
-import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.AcceptActivityInvitePacket
+import dev.cbyrne.kdiscordipc.core.event.data.ActivityJoinRequestData
+import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.ActivityJoinInvitePacket
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.SetActivityPacket
 import dev.cbyrne.kdiscordipc.core.util.currentPid
 import dev.cbyrne.kdiscordipc.data.activity.Activity
 import dev.cbyrne.kdiscordipc.data.activity.activity
 import dev.cbyrne.kdiscordipc.manager.Manager
-import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.AcceptActivityInvitePacket as InboundAcceptActivityInvitePacket
+import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.ActivityJoinInvitePacket as InboundAcceptActivityInvitePacket
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.SetActivityPacket as InboundSetActivityPacket
 
 /**
@@ -24,7 +22,6 @@ class ActivityManager(override val ipc: KDiscordIPC) : Manager() {
      * Sets a user's presence in Discord to a new activity. This has a rate limit of 5 updates per 20 seconds.
      */
     suspend fun setActivity(activity: Activity?) {
-        // TODO: Verify that the response had no errors
         ipc.sendPacket<InboundSetActivityPacket>(SetActivityPacket(currentPid, activity))
         this.activity = activity
     }
@@ -35,24 +32,20 @@ class ActivityManager(override val ipc: KDiscordIPC) : Manager() {
     suspend fun setActivity(details: String? = null, state: String? = null, init: Activity.() -> Unit) =
         setActivity(activity(details, state, init))
 
-    suspend fun acceptInvite(data: ActivityInviteEventData): Boolean {
-        val result = ipc.sendPacket<InboundAcceptActivityInvitePacket>(
-            AcceptActivityInvitePacket(
-                data.channelId,
-                data.messageId,
-                data.activity.sessionId,
-                data.user.id,
-                data.type
-            )
-        )
+    /**
+     * Accepts a 'Ask to Join' request from a user.
+     */
+    suspend fun acceptJoinRequest(user: String): Boolean =
+        ipc.sendPacket<InboundAcceptActivityInvitePacket>(ActivityJoinInvitePacket(user)).data != null
 
-        return result.data != null
-    }
+    /**
+     * Refuses a 'Ask to Join' request from a user.
+     */
+    suspend fun refuseJoinRequest(user: String): Boolean =
+        ipc.sendPacket<InboundAcceptActivityInvitePacket>(ActivityJoinInvitePacket(user)).data == null
 
     /**
      * Clear's a user's presence in Discord to make it show nothing.
      */
-    suspend fun clearActivity() {
-        setActivity(null)
-    }
+    suspend fun clear() = setActivity(null)
 }

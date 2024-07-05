@@ -8,6 +8,9 @@ import kotlinx.serialization.Serializable
  * Represents a Discord event.
  * @param eventName The name of the event.
  *
+ * Note that some events cannot be used without the required scope.
+ * Take also note that some scopes require a verified application.
+ * @see <a href="https://github.com/discord/discord-api-docs/blob/4c29f142415710e1f2b5628a199ae192f25aefe9/docs/topics/OAuth2.md#oauth2-scopes">Discord OAuth2 Scopes</a>
  * @see <a href="https://discord.com/developers/docs/topics/rpc#commands-and-events>Discord RPC Documentation</a>
  */
 enum class DiscordEvent(val eventName: String) {
@@ -88,16 +91,25 @@ enum class DiscordEvent(val eventName: String) {
 
     /**
      * Sent when the user clicks a Rich Presence join invite in chat to join a game
+     *
+     * If your application is not verified, you will not receive dispatches for this event.
+     * You must add the user you want to test with into Developer Portal > Applications > Your Application > App Testers
      */
     ActivityJoin("ACTIVITY_JOIN"),
 
     /**
      * Sent when the user clicks a Rich Presence spectate invite in chat to spectate a game
+     *
+     * If your application is not verified, you will not receive dispatches for this event.
+     * You must add the user you want to test with into Developer Portal > Applications > Your Application > App Testers
      */
     ActivitySpectate("ACTIVITY_SPECTATE"),
 
     /**
      * Sent when the user receives a Rich Presence Ask to Join request
+     *
+     * If your application is not verified, you will not receive dispatches for this event.
+     * You must add the user you want to test with into Developer Portal > Applications > Your Application > App Testers
      */
     ActivityJoinRequest("ACTIVITY_JOIN_REQUEST"),
 }

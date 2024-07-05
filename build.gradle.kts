@@ -25,7 +25,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
 
     implementation(libs.slf4j.api)
-    implementation(libs.slf4j.simple)
     implementation(libs.junixsocket.core)
 
     exampleImplementation(sourceSets.main.get().output)
@@ -42,9 +41,4 @@ publishing {
             from(components["java"])
         }
     }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs += "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-    kotlinOptions.freeCompilerArgs += "-opt-in=kotlinx.serialization.InternalSerializationApi"
 }

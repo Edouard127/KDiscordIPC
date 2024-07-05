@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package dev.cbyrne.kdiscordipc.data.activity
 
 import kotlinx.serialization.KSerializer

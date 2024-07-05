@@ -1,6 +1,7 @@
 package dev.cbyrne.kdiscordipc.data.voiceSettings
 
 import dev.cbyrne.kdiscordipc.core.event.data.EventData
+import dev.cbyrne.kdiscordipc.data.user.User
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -66,6 +67,30 @@ data class Mode(
         val type: Int,
         val code: Int,
         val name: String
+    )
+}
+
+@Serializable
+data class VoiceStateData(
+    @SerialName("voice_state") val voiceState: VoiceState,
+    val user: User,
+    @SerialName("nick") val nickname: String,
+    val volume: Int,
+    val mute: Boolean,
+    val pan: Pan,
+) {
+    @Serializable
+    data class VoiceState(
+        val mute: Boolean,
+        val deaf: Boolean,
+        @SerialName("self_mute") val selfMute: Boolean,
+        @SerialName("self_deaf") val selfDeaf: Boolean,
+        val suppress: Boolean,
+    )
+    @Serializable
+    data class Pan(
+        val left: Float,
+        val right: Float
     )
 }
 

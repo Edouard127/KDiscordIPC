@@ -1,5 +1,3 @@
-@file:Suppress("RedundantSuspendModifier")
-
 package dev.cbyrne.kdiscordipc.manager
 
 import dev.cbyrne.kdiscordipc.KDiscordIPC

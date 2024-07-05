@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReadyEventData(
+data class ReadyData(
     @SerialName("v")
     val version: Int? = null,
     val config: Configuration,

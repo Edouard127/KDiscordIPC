@@ -3,7 +3,7 @@ package dev.cbyrne.kdiscordipc.core.event.data
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ErrorEventData(
-    val code: Int,
-    val message: String
+data class GuildCreateData(
+    val id: String,
+    val name: String,
 ) : EventData()
