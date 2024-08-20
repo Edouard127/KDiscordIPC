@@ -4,19 +4,19 @@ import dev.cbyrne.kdiscordipc.core.socket.RawPacket
 import dev.cbyrne.kdiscordipc.core.socket.Socket
 import dev.cbyrne.kdiscordipc.core.util.reverse
 import java.io.DataInputStream
-import java.io.File
 import java.net.UnixDomainSocketAddress
 import java.nio.ByteBuffer
 import java.nio.channels.SocketChannel
 
 class UnixSocket : Socket {
-    private val socket: SocketChannel = SocketChannel.open()
+    private lateinit var socket: SocketChannel
 
     override val connected: Boolean
         get() = socket.isConnected
 
-    override fun connect(file: File) {
-        socket.connect(UnixDomainSocketAddress.of(file.toPath()))
+    override fun connect(file: String) {
+        socket = SocketChannel.open(UnixDomainSocketAddress.of(file))
+        socket.configureBlocking(false)
     }
 
     override fun read(): RawPacket {

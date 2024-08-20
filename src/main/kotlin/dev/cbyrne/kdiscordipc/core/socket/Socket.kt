@@ -17,7 +17,7 @@ import java.io.File
 interface Socket {
     val connected: Boolean
 
-    fun connect(file: File)
+    fun connect(file: String)
     fun read(): RawPacket
     fun write(bytes: ByteArray)
     fun close()

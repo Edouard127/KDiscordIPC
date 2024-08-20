@@ -127,13 +127,13 @@ class SocketHandler(
      * @throws ConnectionError.NoIPCFile If an IPC file isn't found after 9 attempts.
      */
     @Throws(ConnectionError.NoIPCFile::class)
-    private fun findIPCFile(index: Int = 0): File {
+    private fun findIPCFile(index: Int = 0): String {
         if (index > 9)
             throw ConnectionError.NoIPCFile
 
         val base = if (platform == Platform.WINDOWS) "\\\\?\\pipe\\" else temporaryDirectory
         val file = File(base, "discord-ipc-${index}")
-        return file.takeIf { it.exists() } ?: findIPCFile(index + 1)
+        return file.takeIf { it.exists() }?.absolutePath ?: findIPCFile(index + 1)
     }
 
     /**

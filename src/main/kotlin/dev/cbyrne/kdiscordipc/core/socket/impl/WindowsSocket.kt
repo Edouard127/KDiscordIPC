@@ -19,7 +19,7 @@ class WindowsSocket : Socket {
     override val connected: Boolean
         get() = _connected
 
-    override fun connect(file: File) {
+    override fun connect(file: String) {
         randomAccessFile = RandomAccessFile(file, "rw")
         _connected = true
     }
