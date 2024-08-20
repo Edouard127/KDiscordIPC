@@ -1,8 +1,13 @@
+val kotlinVersion: String by project
+val kotlinxCoroutinesVersion: String by project
+val kotlinxSerializationVersion: String by project
+val slf4jVersion: String by project
+val junixsocketVersion: String by project
+
 plugins {
     kotlin("jvm") version "2.0.0"
     kotlin("plugin.serialization") version "2.0.0"
-
-    `maven-publish`
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "dev.cbyrne"
@@ -19,26 +24,39 @@ sourceSets {
 val exampleImplementation by configurations
 exampleImplementation.extendsFrom(configurations.implementation.get())
 
-dependencies {
-    implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlinx.serialization)
-    implementation(libs.kotlinx.coroutines)
-
-    implementation(libs.slf4j.api)
-    implementation(libs.junixsocket.core)
-
-    exampleImplementation(sourceSets.main.get().output)
-
-    // Log4J is only used in the example project as a backend for SLF4j
-    exampleImplementation(libs.log4j.core)
-    exampleImplementation(libs.log4j.api)
-    exampleImplementation(libs.log4j.slf4j)
+val shadowBundle by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-        }
+dependencies {
+    // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+
+    // SLF4J
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+
+    // JunixSocket
+    shadowBundle(implementation("com.kohlschutter.junixsocket:junixsocket-core:$junixsocketVersion")!!)
+
+    // Example
+    exampleImplementation(sourceSets.main.get().output)
+    exampleImplementation("org.apache.logging.log4j:log4j-api:2.17.1")
+    exampleImplementation("org.apache.logging.log4j:log4j-core:2.17.1")
+    exampleImplementation("org.apache.logging.log4j:log4j-slf4j-impl:2.17.1")
+}
+
+tasks {
+    shadowJar {
+        configurations = listOf(shadowBundle)
+
+        minimize()
+    }
+
+    jar {
+        enabled = false
+        dependsOn(shadowJar)
     }
 }
