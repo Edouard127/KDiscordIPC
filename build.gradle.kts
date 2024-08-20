@@ -1,12 +1,7 @@
-val kotlinVersion: String by project
-val kotlinxCoroutinesVersion: String by project
-val kotlinxSerializationVersion: String by project
-val slf4jVersion: String by project
-val junixsocketVersion: String by project
-
 plugins {
     kotlin("jvm") version "2.0.0"
     kotlin("plugin.serialization") version "2.0.0"
+
     `maven-publish`
 }
 
@@ -25,19 +20,19 @@ val exampleImplementation by configurations
 exampleImplementation.extendsFrom(configurations.implementation.get())
 
 dependencies {
-    // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.coroutines)
 
-    // SLF4J
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation(libs.slf4j.api)
+    implementation(libs.junixsocket.core)
 
-    // Example
     exampleImplementation(sourceSets.main.get().output)
-    exampleImplementation("org.apache.logging.log4j:log4j-api:2.17.1")
-    exampleImplementation("org.apache.logging.log4j:log4j-core:2.17.1")
-    exampleImplementation("org.apache.logging.log4j:log4j-slf4j-impl:2.17.1")
+
+    // Log4J is only used in the example project as a backend for SLF4j
+    exampleImplementation(libs.log4j.core)
+    exampleImplementation(libs.log4j.api)
+    exampleImplementation(libs.log4j.slf4j)
 }
 
 publishing {

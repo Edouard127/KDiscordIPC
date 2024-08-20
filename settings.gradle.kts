@@ -1,8 +1,10 @@
 rootProject.name = "KDiscordIPC"
 
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
+enableFeaturePreview("VERSION_CATALOGS")
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            from(files("libs.versions.toml"))
+        }
     }
 }
