@@ -52,6 +52,7 @@ dependencies {
 tasks {
     shadowJar {
         configurations = listOf(shadowBundle)
+        archiveClassifier.set("") // fix jitpack
 
         minimize()
     }
