@@ -118,6 +118,12 @@ class SocketHandler(
         }
     }
 
+    private val possibleUnixPaths = listOf(
+        "",
+        "/app/com.discordapp.Discord/",
+        "/snap.discord-canary/",
+        "/snap.discord/",
+    )
     /**
      * Attempts to find an IPC file to connect with the Discord client's IPC server.
      *
@@ -127,13 +133,16 @@ class SocketHandler(
      * @throws ConnectionError.NoIPCFile If an IPC file isn't found after 9 attempts.
      */
     @Throws(ConnectionError.NoIPCFile::class)
-    private fun findIPCFile(index: Int = 0): String {
-        if (index > 9)
+    private fun findIPCFile(index: Int = 0, pathIndex: Int = 0): String {
+        if (index > 9 && pathIndex >= possibleUnixPaths.size)
             throw ConnectionError.NoIPCFile
 
-        val base = if (platform == Platform.WINDOWS) "\\\\?\\pipe\\" else temporaryDirectory
+        if (index > 9)
+            return findIPCFile(0, pathIndex + 1)
+
+        val base = if (platform == Platform.WINDOWS) "\\\\?\\pipe\\" else "${temporaryDirectory}/${possibleUnixPaths[pathIndex]}"
         val file = File(base, "discord-ipc-${index}")
-        return file.takeIf { it.exists() }?.absolutePath ?: findIPCFile(index + 1)
+        return file.takeIf { it.exists() }?.absolutePath ?: findIPCFile(index + 1, pathIndex)
     }
 
     /**

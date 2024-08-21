@@ -3,7 +3,6 @@ package dev.cbyrne.kdiscordipc.core.socket.impl
 import dev.cbyrne.kdiscordipc.core.socket.RawPacket
 import dev.cbyrne.kdiscordipc.core.socket.Socket
 import dev.cbyrne.kdiscordipc.core.util.reverse
-import java.io.DataInputStream
 import java.net.UnixDomainSocketAddress
 import java.nio.ByteBuffer
 import java.nio.channels.SocketChannel
@@ -12,32 +11,30 @@ class UnixSocket : Socket {
     private lateinit var socket: SocketChannel
 
     override val connected: Boolean
-        get() = socket.isConnected
+        get() = if (::socket.isInitialized) socket.isConnected else false
 
     override fun connect(file: String) {
         socket = SocketChannel.open(UnixDomainSocketAddress.of(file))
-        socket.configureBlocking(false)
     }
 
     override fun read(): RawPacket {
         val opcode = readLittleEndianInt()
         val length = readLittleEndianInt()
 
-        val stream = DataInputStream(socket.socket().getInputStream())
-        val data = ByteArray(length)
-        stream.readFully(data)
+        val data = ByteBuffer.allocate(length)
+        socket.read(data)
 
-        return RawPacket(opcode, length, data)
+        return RawPacket(opcode, length, data.array())
     }
 
     private fun readLittleEndianInt() =
         ByteBuffer.wrap(readBytes(4)).int.reverse()
 
     private fun readBytes(length: Int): ByteArray {
-        val array = ByteArray(length)
-        socket.read(ByteBuffer.wrap(array))
+        val buffer = ByteBuffer.allocate(length)
+        socket.read(buffer)
 
-        return array
+        return buffer.array()
     }
 
     override fun write(bytes: ByteArray) {
