@@ -39,36 +39,6 @@ abstract class DispatchEventPacket(
     ) : DispatchEventPacket()
 
     @Serializable
-    data class GuildCreate(
-        override val data: GuildCreateData
-    ) : DispatchEventPacket()
-
-    @Serializable
-    data class GuildStatus(
-        override val data: GuildStatusData
-    ) : DispatchEventPacket()
-
-    @Serializable
-    data class MessageCreate(
-        override val data: MessageData
-    ) : DispatchEventPacket()
-
-    @Serializable
-    data class MessageUpdate(
-        override val data: MessageData
-    ) : DispatchEventPacket()
-
-    @Serializable
-    data class MessageDelete(
-        override val data: MessageData
-    ) : DispatchEventPacket()
-
-    @Serializable
-    data class Notification(
-        override val data: Nothing,
-    ) : DispatchEventPacket()
-
-    @Serializable
     data class SpeakingStart(
         override val data: SpeakingData
     ) : DispatchEventPacket()

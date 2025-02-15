@@ -1,6 +1,8 @@
 package dev.cbyrne.kdiscordipc.core.packet.outbound.impl
 
 import dev.cbyrne.kdiscordipc.core.packet.outbound.OutboundPacket
+import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.ActivityJoinInvitePacket
+import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.ActivityJoinInvitePacket.Arguments
 import dev.cbyrne.kdiscordipc.data.activity.Activity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -29,6 +31,10 @@ data class CloseActivityRequestPacket(
     override val args: Arguments,
     override var nonce: String = "0"
 ) : CommandPacket() {
+    constructor(
+        userId: String,
+    ) : this(args = Arguments(userId))
+
     @Serializable
     data class Arguments(
         val userId: String,

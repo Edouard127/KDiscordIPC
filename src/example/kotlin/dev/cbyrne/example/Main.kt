@@ -43,11 +43,9 @@ suspend fun main() {
         ipc.applicationManager.authenticate()
 
         // Subscribe to some events
-        //ipc.subscribe(DiscordEvent.GuildStatus)
         ipc.subscribe(DiscordEvent.ActivityJoin)
         ipc.subscribe(DiscordEvent.ActivitySpectate)
         ipc.subscribe(DiscordEvent.ActivityJoinRequest)
-        //ipc.subscribe(DiscordEvent.NotificationCreate)
     }
 
     ipc.on<DisconnectedEvent> {
@@ -66,22 +64,6 @@ suspend fun main() {
         logger.info("We have been invited to join ${data.userId}'s party!")
 
         ipc.activityManager.acceptJoinRequest(data.userId)
-    }
-
-    ipc.on<VoiceSettingsUpdateEvent> {
-        logger.info("Voice settings updated! User is now ${if (this.data.mute) "" else "not "}muted")
-    }
-
-    ipc.on<MessageCreateEvent> {
-        logger.info("Message received: ${data.message}")
-    }
-
-    ipc.on<MessageUpdateEvent> {
-        logger.info("Message updated: ${data.message}")
-    }
-
-    ipc.on<MessageDeleteEvent> {
-        logger.info("Message deleted: ${data.message}")
     }
 
     ipc.connect()

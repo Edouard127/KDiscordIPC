@@ -4,8 +4,8 @@ import dev.cbyrne.kdiscordipc.KDiscordIPC
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.AuthenticatePacket
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.AuthorizePacket
 import dev.cbyrne.kdiscordipc.manager.Manager
-import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.AuthenticatePacket as InboundAuthenticatePacket
-import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.AuthorizePacket as InboundAuthorizePacket
+import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.AuthenticatePacket as InboundAuthenticate
+import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.AuthorizePacket as InboundAuthorize
 
 /**
  * This manager gives you access  to a bearer token for the currently connected Discord user, which you can then use against the Discord REST API.
@@ -16,10 +16,14 @@ class ApplicationManager(override val ipc: KDiscordIPC) : Manager() {
      * You can then use the token on the `https://discord.com/api/oauth2/token/rpc` endpoint to get a bearer token.
      *
      * Note that your application must be in a private beta in order to use this in production.
-     * TODO: Retrieve the token from the `https://discord.com/api/oauth2/token/rpc` endpoint.
      */
-    suspend fun authorize(scopes: Array<String>? = null, clientId: String? = null, rpcToken: String? = null, username: String? = null): InboundAuthorizePacket.Data {
-        val response: InboundAuthorizePacket = ipc.sendPacket(AuthorizePacket(scopes, clientId, rpcToken, username))
+    suspend fun authorize(
+        scopes: Array<String>? = null,
+        clientId: String? = null,
+        rpcToken: String? = null,
+        username: String? = null,
+    ): InboundAuthorize.Data {
+        val response = ipc.sendPacket<InboundAuthorize>(AuthorizePacket(scopes, clientId, rpcToken, username))
         return response.data
     }
 
@@ -32,8 +36,8 @@ class ApplicationManager(override val ipc: KDiscordIPC) : Manager() {
      *
      * These bearer tokens are active for seven days, after which they will expire.
      */
-    suspend fun authenticate(token: String? = null): InboundAuthenticatePacket.Data {
-        val response: InboundAuthenticatePacket = ipc.sendPacket(AuthenticatePacket(token))
+    suspend fun authenticate(token: String? = null): InboundAuthenticate.Data {
+        val response = ipc.sendPacket<InboundAuthenticate>(AuthenticatePacket(token))
         return response.data
     }
 }
