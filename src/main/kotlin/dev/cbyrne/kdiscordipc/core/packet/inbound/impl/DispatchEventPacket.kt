@@ -62,4 +62,9 @@ abstract class DispatchEventPacket(
     data class VoiceSettingsUpdate(
         override val data: VoiceSettings
     ) : DispatchEventPacket()
+
+    @Serializable
+    data class OverlayUpdate(
+        override val data: OverlayData
+    ) : DispatchEventPacket()
 }

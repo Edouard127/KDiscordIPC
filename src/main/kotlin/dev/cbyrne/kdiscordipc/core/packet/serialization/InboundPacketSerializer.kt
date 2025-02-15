@@ -19,6 +19,7 @@ object InboundPacketSerializer : JsonContentPolymorphicSerializer<InboundPacket>
             "ACTIVITY_JOIN" -> DispatchEventPacket.ActivityJoin.serializer()
             "ACTIVITY_SPECTATE" -> error("ACTIVITY_SPECTATE is not supported.")
             "ACTIVITY_JOIN_REQUEST" -> DispatchEventPacket.ActivityJoinRequest.serializer()
+            "OVERLAY_UPDATE" -> DispatchEventPacket.OverlayUpdate.serializer()
             else -> when (val command = element.contentOrNull("cmd")) {
                 "AUTHORIZE" -> AuthorizePacket.serializer()
                 "AUTHENTICATE" -> AuthenticatePacket.serializer()

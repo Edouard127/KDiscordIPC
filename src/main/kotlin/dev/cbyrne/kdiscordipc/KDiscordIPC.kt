@@ -15,6 +15,7 @@ import dev.cbyrne.kdiscordipc.core.socket.SocketProvider
 import dev.cbyrne.kdiscordipc.core.socket.handler.SocketHandler
 import dev.cbyrne.kdiscordipc.manager.impl.ActivityManager
 import dev.cbyrne.kdiscordipc.manager.impl.ApplicationManager
+import dev.cbyrne.kdiscordipc.manager.impl.OverlayManager
 import dev.cbyrne.kdiscordipc.manager.impl.VoiceSettingsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +60,7 @@ class KDiscordIPC(
     val activityManager = ActivityManager(this)
     val applicationManager = ApplicationManager(this)
     val voiceSettingsManager = VoiceSettingsManager(this)
+    val overlayManager = OverlayManager(this)
 
     private val _events = MutableSharedFlow<Event>()
     val events = _events.asSharedFlow()
@@ -76,6 +78,7 @@ class KDiscordIPC(
         activityManager.init()
         applicationManager.init()
         voiceSettingsManager.init()
+        overlayManager.init()
 
         socketHandler.connect(index)
         writePacket(HandshakePacket(1, clientID))

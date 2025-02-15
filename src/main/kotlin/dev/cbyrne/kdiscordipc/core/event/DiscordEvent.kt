@@ -11,24 +11,9 @@ import kotlinx.serialization.Serializable
  * Note that some events cannot be used without the required scope.
  * Take also note that some scopes require a verified application.
  * @see <a href="https://github.com/discord/discord-api-docs/blob/4c29f142415710e1f2b5628a199ae192f25aefe9/docs/topics/OAuth2.md#oauth2-scopes">Discord OAuth2 Scopes</a>
- * @see <a href="https://discord.com/developers/docs/topics/rpc#commands-and-events>Discord RPC Documentation</a>
+ * @see <a href="https://discord.com/developers/docs/topics/rpc#commands-and-events">Discord RPC Documentation</a>
  */
 enum class DiscordEvent(val eventName: String) {
-    /**
-     * Sent when a subscribed server's state changes
-     */
-    GuildStatus("GUILD_STATUS"),
-
-    /**
-     * 	Sent when a guild is created/joined on the client
-     */
-    GuildCreate("GUILD_CREATE"),
-
-    /**
-     * Sent when a channel is created/joined on the client
-     */
-    ChannelCreate("CHANNEL_CREATE"),
-
     /**
      * Sent when the client joins a voice channel
      */
@@ -68,26 +53,6 @@ enum class DiscordEvent(val eventName: String) {
      * Sent when a user in a subscribed voice channel stops speaking
      */
     SpeakingStop("SPEAKING_STOP"),
-
-    /**
-     * Sent when a message is created in a subscribed text channel
-     */
-    MessageCreate("MESSAGE_CREATE"),
-
-    /**
-     * Sent when a message is updated in a subscribed text channel
-     */
-    MessageUpdate("MESSAGE_UPDATE"),
-
-    /**
-     * Sent when a message is deleted in a subscribed text channel
-     */
-    MessageDelete("MESSAGE_DELETE"),
-
-    /**
-     * Sent when the client receives a notification (mention or new message in eligible channels)
-     */
-    NotificationCreate("NOTIFICATION_CREATE"),
 
     /**
      * Sent when the user clicks a Rich Presence join invite in chat to join a game

@@ -4,7 +4,9 @@ import dev.cbyrne.kdiscordipc.KDiscordIPC
 import dev.cbyrne.kdiscordipc.core.event.DiscordEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.*
 import dev.cbyrne.kdiscordipc.core.event.impl.DisconnectedEvent
+import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.OpenActivityInvitePacket
 import dev.cbyrne.kdiscordipc.data.activity.*
+import dev.cbyrne.kdiscordipc.data.overlay.ActivityActionType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.apache.logging.log4j.LogManager
@@ -24,6 +26,8 @@ suspend fun main() {
 
     ipc.on<ReadyEvent> {
         logger.info("Ready! (${data.user.username}#${data.user.discriminator})")
+
+        ipc.overlayManager.openVoiceSettings()
 
         // Set the user's activity (a.k.a. rich presence)
         ipc.activityManager.setActivity("Hello") {
