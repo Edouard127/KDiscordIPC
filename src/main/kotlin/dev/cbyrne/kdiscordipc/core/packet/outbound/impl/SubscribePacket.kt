@@ -2,6 +2,8 @@ package dev.cbyrne.kdiscordipc.core.packet.outbound.impl
 
 import dev.cbyrne.kdiscordipc.core.event.DiscordEvent
 import dev.cbyrne.kdiscordipc.core.packet.outbound.OutboundPacket
+import dev.cbyrne.kdiscordipc.core.util.currentPid
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,12 +15,14 @@ import kotlinx.serialization.Serializable
 data class SubscribePacket(
     override val opcode: Int = 0x01,
     override val cmd: String = "SUBSCRIBE",
-    override val args: Arguments = Arguments(),
+    override val args: Arguments,
     override var nonce: String = "0",
     val evt: String
 ) : CommandPacket() {
-    constructor(name: DiscordEvent) : this(evt = name.eventName)
+    constructor(name: DiscordEvent) : this(args = Arguments(currentPid), evt = name.eventName)
 
     @Serializable
-    class Arguments : OutboundPacket.Arguments()
+    class Arguments(
+        @SerialName("pid") val pid: Long, // Required for the overlay event subscription
+    ) : OutboundPacket.Arguments()
 }

@@ -18,12 +18,12 @@ object OutboundPacketSerializer : JsonContentPolymorphicSerializer<OutboundPacke
             "GET_VOICE_SETTINGS" -> GetVoiceSettingsPacket.serializer()
             "SET_VOICE_SETTINGS" -> SetVoiceSettingsPacket.serializer()
             "SET_ACTIVITY" -> SetActivityPacket.serializer()
+            "GET_USER" -> GetUserPacket.serializer()
             "SEND_ACTIVITY_JOIN_INVITE" -> ActivityJoinInvitePacket.serializer()
             "CLOSE_ACTIVITY_REQUEST" -> SetActivityPacket.serializer()
             "OPEN_OVERLAY_ACTIVITY_INVITE" -> OpenActivityInvitePacket.serializer()
             "OPEN_OVERLAY_GUILD_INVITE" -> OpenGuildInvitePacket.serializer()
             "OPEN_OVERLAY_VOICE_SETTINGS" -> OpenVoiceSettingsPacket.serializer()
-            "GET_USER" -> GetUserPacket.serializer()
             else -> HandshakePacket.serializer()
         }
     }

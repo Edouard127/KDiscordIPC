@@ -1,14 +1,11 @@
 package dev.cbyrne.kdiscordipc.manager.impl
 
 import dev.cbyrne.kdiscordipc.KDiscordIPC
-import dev.cbyrne.kdiscordipc.core.event.data.ErrorData
 import dev.cbyrne.kdiscordipc.core.event.data.OverlayData
 import dev.cbyrne.kdiscordipc.core.event.impl.OverlayEvent
-import dev.cbyrne.kdiscordipc.core.packet.inbound.InboundPacket
 import dev.cbyrne.kdiscordipc.core.util.currentPid
 import dev.cbyrne.kdiscordipc.data.overlay.ActivityActionType
 import dev.cbyrne.kdiscordipc.manager.Manager
-import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.ErrorPacket as InboundError
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.OpenActivityInvitePacket as InboundOpenActivityInvite
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.OpenActivityInvitePacket as OutboundOpenActivityInvite
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.OpenGuildInvitePacket as InboundOpenGuildInvite
@@ -21,6 +18,12 @@ class OverlayManager(override val ipc: KDiscordIPC) : Manager() {
         private set
 
     private var onToggle = mutableListOf<(OverlayData) -> Unit>()
+
+    /**
+     * Returns whether the overlay is currently opened or not
+     */
+    val isOpened: Boolean
+        get() = overlayState?.enabled ?: false
 
     /**
      * Registers a [block] for overlay data updates

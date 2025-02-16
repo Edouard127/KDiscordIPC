@@ -27,13 +27,13 @@ object InboundPacketSerializer : JsonContentPolymorphicSerializer<InboundPacket>
                 "SET_USER_VOICE_SETTINGS" -> SetUserVoiceSettingsPacket.serializer()
                 "GET_VOICE_SETTINGS" -> GetVoiceSettingsPacket.serializer()
                 "SET_VOICE_SETTINGS" -> SetVoiceSettingsPacket.serializer()
+                "GET_USER" -> GetUserPacket.serializer()
                 "SET_ACTIVITY" -> SetActivityPacket.serializer()
                 "SEND_ACTIVITY_JOIN_INVITE" -> ActivityJoinInvitePacket.serializer()
                 "CLOSE_ACTIVITY_REQUEST" -> CloseActivityRequestPacket.serializer()
                 "OPEN_OVERLAY_ACTIVITY_INVITE" -> OpenActivityInvitePacket.serializer()
                 "OPEN_OVERLAY_GUILD_INVITE" -> OpenGuildInvitePacket.serializer()
                 "OPEN_OVERLAY_VOICE_SETTINGS" -> OpenVoiceSettingsPacket.serializer()
-                "GET_USER" -> GetUserPacket.serializer()
                 else -> error("Unknown packet command: $command | Event: $evt")
             }
         }

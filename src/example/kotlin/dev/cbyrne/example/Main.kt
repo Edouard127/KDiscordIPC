@@ -4,9 +4,7 @@ import dev.cbyrne.kdiscordipc.KDiscordIPC
 import dev.cbyrne.kdiscordipc.core.event.DiscordEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.*
 import dev.cbyrne.kdiscordipc.core.event.impl.DisconnectedEvent
-import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.OpenActivityInvitePacket
 import dev.cbyrne.kdiscordipc.data.activity.*
-import dev.cbyrne.kdiscordipc.data.overlay.ActivityActionType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.apache.logging.log4j.LogManager
@@ -25,12 +23,21 @@ suspend fun main() {
     logger.info("Starting example!")
 
     ipc.on<ReadyEvent> {
+//        ipc.applicationManager.authorize(
+//            scopes = arrayOf("identify", "rpc.notifications.read"),
+//            clientId = "945428344806183003"
+//        )
+
         logger.info("Ready! (${data.user.username}#${data.user.discriminator})")
+
+        // Subscribe to some events
+        ipc.subscribe(DiscordEvent.ActivityJoin)
+        ipc.subscribe(DiscordEvent.ActivitySpectate)
+        ipc.subscribe(DiscordEvent.ActivityJoinRequest)
+        ipc.subscribe(DiscordEvent.OverlayUpdate)
 
         ipc.userManager.getUser("584363189890711562")
         ipc.overlayManager.openVoiceSettings()
-        ipc.overlayManager.openGuildInvite("4zbcfGGy")
-        ipc.overlayManager.openActivityInvite(ActivityActionType.Join)
 
         // Set the user's activity (a.k.a. rich presence)
         ipc.activityManager.setActivity("Hello") {
@@ -42,17 +49,7 @@ suspend fun main() {
             //button("Click me", "https://google.com") // Buttons cannot be used with secrets (parties)
         }
 
-        ipc.applicationManager.authorize(
-            scopes = arrayOf("identify", "rpc.notifications.read"),
-            clientId = "945428344806183003"
-        )
-
         ipc.applicationManager.authenticate()
-
-        // Subscribe to some events
-        ipc.subscribe(DiscordEvent.ActivityJoin)
-        ipc.subscribe(DiscordEvent.ActivitySpectate)
-        ipc.subscribe(DiscordEvent.ActivityJoinRequest)
     }
 
     ipc.on<DisconnectedEvent> {

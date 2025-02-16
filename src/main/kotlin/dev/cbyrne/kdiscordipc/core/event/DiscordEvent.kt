@@ -77,4 +77,9 @@ enum class DiscordEvent(val eventName: String) {
      * You must add the user you want to test with into Developer Portal > Applications > Your Application > App Testers
      */
     ActivityJoinRequest("ACTIVITY_JOIN_REQUEST"),
+
+    /**
+     * Sent when the user toggles on or off the Discord overlay
+     */
+    OverlayUpdate("OVERLAY_UPDATE"),
 }
