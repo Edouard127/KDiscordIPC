@@ -1,8 +1,9 @@
 package dev.cbyrne.kdiscordipc.core.packet.inbound.impl
 
 import dev.cbyrne.kdiscordipc.core.packet.inbound.InboundPacket
+import kotlinx.serialization.Serializable
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class ErrorPacket(
     val code: Int,
     val message: String,

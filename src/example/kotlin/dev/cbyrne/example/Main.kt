@@ -27,7 +27,10 @@ suspend fun main() {
     ipc.on<ReadyEvent> {
         logger.info("Ready! (${data.user.username}#${data.user.discriminator})")
 
+        ipc.userManager.getUser("584363189890711562")
         ipc.overlayManager.openVoiceSettings()
+        ipc.overlayManager.openGuildInvite("4zbcfGGy")
+        ipc.overlayManager.openActivityInvite(ActivityActionType.Join)
 
         // Set the user's activity (a.k.a. rich presence)
         ipc.activityManager.setActivity("Hello") {

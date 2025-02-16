@@ -11,6 +11,4 @@ data class User(
     val discriminator: String,
     val avatar: String? = null,
     val bot: Boolean? = null,
-    val flags: Int? = null,
-    @SerialName("premium_type") val premiumType: PremiumType? = null
 ) : EventData()

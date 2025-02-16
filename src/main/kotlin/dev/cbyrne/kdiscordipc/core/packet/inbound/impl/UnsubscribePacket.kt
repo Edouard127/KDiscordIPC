@@ -11,7 +11,7 @@ data class UnsubscribePacket(
     override val cmd: String = "UNSUBSCRIBE",
     override val opcode: Int = 0x01,
     override val nonce: String = "0"
-): CommandPacket() {
+) : CommandPacket() {
     @Serializable
     data class Data(
         @SerialName("evt")

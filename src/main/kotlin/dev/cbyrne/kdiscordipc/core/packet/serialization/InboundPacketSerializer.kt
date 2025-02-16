@@ -1,9 +1,8 @@
 package dev.cbyrne.kdiscordipc.core.packet.serialization
 
 import dev.cbyrne.kdiscordipc.core.packet.inbound.InboundPacket
-import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.DispatchEventPacket
-import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.SetActivityPacket
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.*
+import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.OpenActivityInvitePacket
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.*
 
@@ -31,6 +30,10 @@ object InboundPacketSerializer : JsonContentPolymorphicSerializer<InboundPacket>
                 "SET_ACTIVITY" -> SetActivityPacket.serializer()
                 "SEND_ACTIVITY_JOIN_INVITE" -> ActivityJoinInvitePacket.serializer()
                 "CLOSE_ACTIVITY_REQUEST" -> CloseActivityRequestPacket.serializer()
+                "OPEN_OVERLAY_ACTIVITY_INVITE" -> OpenActivityInvitePacket.serializer()
+                "OPEN_OVERLAY_GUILD_INVITE" -> OpenGuildInvitePacket.serializer()
+                "OPEN_OVERLAY_VOICE_SETTINGS" -> OpenVoiceSettingsPacket.serializer()
+                "GET_USER" -> GetUserPacket.serializer()
                 else -> error("Unknown packet command: $command | Event: $evt")
             }
         }

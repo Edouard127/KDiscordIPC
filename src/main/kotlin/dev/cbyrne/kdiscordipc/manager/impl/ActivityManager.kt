@@ -34,13 +34,17 @@ class ActivityManager(override val ipc: KDiscordIPC) : Manager() {
         setActivity(activity(details, state, init))
 
     /**
-     * Accepts a 'Ask to Join' request from a user.
+     * Accepts an 'Ask to Join' request from a user
+     *
+     * @return Whether the command was successful
      */
     suspend fun acceptJoinRequest(user: String): Boolean =
-        ipc.sendPacket<InboundAcceptActivity>(OutboundActivityJoin(user)).data != null
+        ipc.sendPacket<InboundAcceptActivity>(OutboundActivityJoin(user)).data == null
 
     /**
-     * Refuses a 'Ask to Join' request from a user.
+     * Refuses an 'Ask to Join' request from a user
+     *
+     * @return Whether the command was successful
      */
     suspend fun refuseJoinRequest(user: String): Boolean =
         ipc.sendPacket<InboundCloseActivity>(OutboundCloseActivity(user)).data == null

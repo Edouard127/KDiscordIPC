@@ -8,39 +8,44 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-@Serializable(with = PremiumType.Companion.PremiumTypeSerializer::class)
-enum class PremiumType(val index: Int) {
+@Serializable(with = UserFlag.Companion.UserFlagSerializer::class)
+enum class UserFlag(val value: Int) {
     /**
-     * This user does not have Discord Nitro
+     * This user is a Discord Partner
      */
-    None(0),
+    Partner(2),
 
     /**
-     * This user has 'Discord Nitro Classic' ($5)
+     * This user is a HypeSquad Events participant
      */
-    Tier1(1),
+    HypeSquadEvents(4),
 
     /**
-     * This user has 'Discord Nitro' ($10)
+     * This user is part of the House Bravery
      */
-    Tier2(2),
-    
+    HypeSquadHouse1(64),
+
     /**
-     * This user has 'Discord Nitro Basic' ($3)
+     * This user is part of the House Brilliance
      */
-    Tier3(3);
+    HypeSquadHouse2(128),
+
+    /**
+     * This user is part of the House Balance
+     */
+    HypeSquadHouse3(256);
 
     companion object {
-        open class PremiumTypeSerializer : KSerializer<PremiumType> {
+        open class UserFlagSerializer : KSerializer<UserFlag> {
             override val descriptor: SerialDescriptor =
                 PrimitiveSerialDescriptor("dev.cbyrne.kdiscordipc.data.user", PrimitiveKind.INT)
 
             override fun deserialize(decoder: Decoder) =
                 decoder.decodeInt().let { value ->
-                    PremiumType.entries.first { it.index == value }
+                    UserFlag.entries.first { it.value == value }
                 }
 
-            override fun serialize(encoder: Encoder, value: PremiumType) = encoder.encodeInt(value.index)
+            override fun serialize(encoder: Encoder, value: UserFlag) = encoder.encodeInt(value.value)
         }
     }
 }

@@ -2,9 +2,11 @@ package dev.cbyrne.kdiscordipc
 
 import dev.cbyrne.kdiscordipc.core.event.DiscordEvent
 import dev.cbyrne.kdiscordipc.core.event.Event
+import dev.cbyrne.kdiscordipc.core.event.data.ErrorData
 import dev.cbyrne.kdiscordipc.core.event.impl.*
 import dev.cbyrne.kdiscordipc.core.packet.inbound.InboundPacket
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.DispatchEventPacket
+import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.ErrorPacket
 import dev.cbyrne.kdiscordipc.core.packet.outbound.OutboundPacket
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.HandshakePacket
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.SubscribePacket
@@ -16,6 +18,7 @@ import dev.cbyrne.kdiscordipc.core.socket.handler.SocketHandler
 import dev.cbyrne.kdiscordipc.manager.impl.ActivityManager
 import dev.cbyrne.kdiscordipc.manager.impl.ApplicationManager
 import dev.cbyrne.kdiscordipc.manager.impl.OverlayManager
+import dev.cbyrne.kdiscordipc.manager.impl.UserManager
 import dev.cbyrne.kdiscordipc.manager.impl.VoiceSettingsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,6 +64,7 @@ class KDiscordIPC(
     val applicationManager = ApplicationManager(this)
     val voiceSettingsManager = VoiceSettingsManager(this)
     val overlayManager = OverlayManager(this)
+    val userManager = UserManager(this)
 
     private val _events = MutableSharedFlow<Event>()
     val events = _events.asSharedFlow()
@@ -79,6 +83,7 @@ class KDiscordIPC(
         applicationManager.init()
         voiceSettingsManager.init()
         overlayManager.init()
+        userManager.init()
 
         socketHandler.connect(index)
         writePacket(HandshakePacket(1, clientID))
@@ -95,6 +100,8 @@ class KDiscordIPC(
                 is DispatchEventPacket.VoiceChannelSelect -> _events.emit(VoiceChannelSelectEvent(it.data))
                 is DispatchEventPacket.VoiceConnectionStatus -> _events.emit(VoiceConnectionStatusEvent(it.data))
                 is DispatchEventPacket.VoiceSettingsUpdate -> _events.emit(VoiceSettingsUpdateEvent(it.data))
+                is DispatchEventPacket.OverlayUpdate -> _events.emit(OverlayEvent(it.data))
+                is ErrorPacket -> _events.emit(ErrorEvent(ErrorData(it.code, it.message)))
                 else -> _packets.emit(it)
             }
         }
@@ -106,7 +113,7 @@ class KDiscordIPC(
      * @param T The type of event to listen for.
      * @param consumer The consumer function to invoke when the event is received.
      */
-    suspend inline fun <reified T : Any> on(noinline consumer: suspend T.() -> Unit) =
+    inline fun <reified T : Any> on(noinline consumer: suspend T.() -> Unit) =
         events.filterIsInstance<T>().onEach { event ->
             scope.launch { consumer(event) }
         }.launchIn(scope)
