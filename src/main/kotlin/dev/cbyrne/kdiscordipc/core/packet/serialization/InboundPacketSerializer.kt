@@ -3,6 +3,7 @@ package dev.cbyrne.kdiscordipc.core.packet.serialization
 import dev.cbyrne.kdiscordipc.core.packet.inbound.InboundPacket
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.*
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.OpenActivityInvitePacket
+import dev.cbyrne.kdiscordipc.data.activity.Activity
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.*
 
@@ -29,6 +30,7 @@ object InboundPacketSerializer : JsonContentPolymorphicSerializer<InboundPacket>
                 "SET_VOICE_SETTINGS" -> SetVoiceSettingsPacket.serializer()
                 "GET_USER" -> GetUserPacket.serializer()
                 "SET_ACTIVITY" -> SetActivityPacket.serializer()
+                "SEND_ACTIVITY_INVITE" -> ActivitySendInvitePacket.serializer()
                 "SEND_ACTIVITY_JOIN_INVITE" -> ActivityJoinInvitePacket.serializer()
                 "CLOSE_ACTIVITY_REQUEST" -> CloseActivityRequestPacket.serializer()
                 "OPEN_OVERLAY_ACTIVITY_INVITE" -> OpenActivityInvitePacket.serializer()

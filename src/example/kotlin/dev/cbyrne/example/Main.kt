@@ -5,6 +5,7 @@ import dev.cbyrne.kdiscordipc.core.event.DiscordEvent
 import dev.cbyrne.kdiscordipc.core.event.impl.*
 import dev.cbyrne.kdiscordipc.core.event.impl.DisconnectedEvent
 import dev.cbyrne.kdiscordipc.data.activity.*
+import dev.cbyrne.kdiscordipc.data.overlay.ActivityActionType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.apache.logging.log4j.LogManager
@@ -31,13 +32,11 @@ suspend fun main() {
         logger.info("Ready! (${data.user.username}#${data.user.discriminator})")
 
         // Subscribe to some events
+        //ipc.subscribe(DiscordEvent.LobbyUpdate)
         ipc.subscribe(DiscordEvent.ActivityJoin)
         ipc.subscribe(DiscordEvent.ActivitySpectate)
         ipc.subscribe(DiscordEvent.ActivityJoinRequest)
         ipc.subscribe(DiscordEvent.OverlayUpdate)
-
-        ipc.userManager.getUser("584363189890711562")
-        ipc.overlayManager.openVoiceSettings()
 
         // Set the user's activity (a.k.a. rich presence)
         ipc.activityManager.setActivity("Hello") {
@@ -48,6 +47,8 @@ suspend fun main() {
             secrets(UUID.randomUUID().toString())
             //button("Click me", "https://google.com") // Buttons cannot be used with secrets (parties)
         }
+
+        println(ipc.activityManager.invitePlayer("295974862646804480", ActivityActionType.Join))
 
         ipc.applicationManager.authenticate()
     }

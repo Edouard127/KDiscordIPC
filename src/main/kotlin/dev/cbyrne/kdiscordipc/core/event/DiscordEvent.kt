@@ -54,6 +54,8 @@ enum class DiscordEvent(val eventName: String) {
      */
     SpeakingStop("SPEAKING_STOP"),
 
+    LobbyUpdate("LOBBY_UPDATE"),
+
     /**
      * Sent when the user clicks a Rich Presence join invite in chat to join a game
      *

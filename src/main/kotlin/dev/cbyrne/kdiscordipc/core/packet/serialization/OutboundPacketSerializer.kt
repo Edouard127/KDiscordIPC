@@ -1,5 +1,6 @@
 package dev.cbyrne.kdiscordipc.core.packet.serialization
 
+import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.ActivitySendInvitePacket
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.SetUserVoiceSettingsPacket
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.SetVoiceSettingsPacket
 import dev.cbyrne.kdiscordipc.core.packet.outbound.OutboundPacket
@@ -19,6 +20,7 @@ object OutboundPacketSerializer : JsonContentPolymorphicSerializer<OutboundPacke
             "SET_VOICE_SETTINGS" -> SetVoiceSettingsPacket.serializer()
             "SET_ACTIVITY" -> SetActivityPacket.serializer()
             "GET_USER" -> GetUserPacket.serializer()
+            "SEND_ACTIVITY_INVITE" -> ActivitySendInvitePacket.serializer()
             "SEND_ACTIVITY_JOIN_INVITE" -> ActivityJoinInvitePacket.serializer()
             "CLOSE_ACTIVITY_REQUEST" -> SetActivityPacket.serializer()
             "OPEN_OVERLAY_ACTIVITY_INVITE" -> OpenActivityInvitePacket.serializer()

@@ -4,7 +4,10 @@ import dev.cbyrne.kdiscordipc.KDiscordIPC
 import dev.cbyrne.kdiscordipc.core.util.currentPid
 import dev.cbyrne.kdiscordipc.data.activity.Activity
 import dev.cbyrne.kdiscordipc.data.activity.activity
+import dev.cbyrne.kdiscordipc.data.overlay.ActivityActionType
 import dev.cbyrne.kdiscordipc.manager.Manager
+import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.ActivitySendInvitePacket as InboundSendInvite
+import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.ActivitySendInvitePacket as OutboundSendInvite
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.CloseActivityRequestPacket as InboundCloseActivity
 import dev.cbyrne.kdiscordipc.core.packet.outbound.impl.CloseActivityRequestPacket as OutboundCloseActivity
 import dev.cbyrne.kdiscordipc.core.packet.inbound.impl.ActivityJoinInvitePacket as InboundAcceptActivity
@@ -32,6 +35,14 @@ class ActivityManager(override val ipc: KDiscordIPC) : Manager() {
      */
     suspend fun setActivity(details: String? = null, state: String? = null, init: Activity.() -> Unit) =
         setActivity(activity(details, state, init))
+
+    /**
+     * Sends an invitation to join the party
+     *
+     * @return Whether the command was successful
+     */
+    suspend fun invitePlayer(user: String, type: ActivityActionType): Boolean =
+        ipc.sendPacket<InboundSendInvite>(OutboundSendInvite(user, type)).data == null
 
     /**
      * Accepts an 'Ask to Join' request from a user
