@@ -14,8 +14,12 @@ class UserManager(override val ipc: KDiscordIPC) : Manager() {
      */
     lateinit var currentUser: User; private set
 
+    /**
+     * Send a command to get a user from its id
+     * This function will hang if any unexpected errors happen
+     */
     suspend fun getUser(id: String) =
-        ipc.sendPacket<InboundGetUser>(OutboundGetUser(id))
+        ipc.sendPacket<InboundGetUser>(OutboundGetUser(id)).data
 
     override suspend fun init() {
         ipc.on<ReadyEvent> { currentUser = data.user }
