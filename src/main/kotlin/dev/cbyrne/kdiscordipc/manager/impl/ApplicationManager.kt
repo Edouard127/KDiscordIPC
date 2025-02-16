@@ -22,10 +22,7 @@ class ApplicationManager(override val ipc: KDiscordIPC) : Manager() {
         clientId: String? = null,
         rpcToken: String? = null,
         username: String? = null,
-    ): InboundAuthorize.Data {
-        val response = ipc.sendPacket<InboundAuthorize>(AuthorizePacket(scopes, clientId, rpcToken, username))
-        return response.data
-    }
+    ) = ipc.sendPacket<InboundAuthorize>(AuthorizePacket(scopes, clientId, rpcToken, username)).data
 
     /**
      * **Make sure that you have `http://127.0.0.1` set as a valid redirect URI for your application in the Developer Portal.**
@@ -36,8 +33,6 @@ class ApplicationManager(override val ipc: KDiscordIPC) : Manager() {
      *
      * These bearer tokens are active for seven days, after which they will expire.
      */
-    suspend fun authenticate(token: String? = null): InboundAuthenticate.Data {
-        val response = ipc.sendPacket<InboundAuthenticate>(AuthenticatePacket(token))
-        return response.data
-    }
+    suspend fun authenticate(token: String? = null) =
+        ipc.sendPacket<InboundAuthenticate>(AuthenticatePacket(token)).data
 }
